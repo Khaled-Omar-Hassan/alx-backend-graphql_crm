@@ -1,5 +1,4 @@
 from django.db import models
-from graphene_django import DjangoObjectType
 
 
 class Customer(models.Model):
@@ -28,6 +27,3 @@ class Order(models.Model):
 def __str__(self):
 
     return self.name
-
-
-all_customers = DjangoFilterConnectionField(CustomerNode)
