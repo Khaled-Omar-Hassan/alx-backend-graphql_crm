@@ -18,3 +18,6 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
 # Keep Product and Order models as before
+def __str__(self):
+
+    return self.name
