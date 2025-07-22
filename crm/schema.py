@@ -10,13 +10,16 @@ import re
 # GraphQL Types
 # ---------------------------
 
+
 class CustomerType(DjangoObjectType):
     class Meta:
         model = Customer
 
+
 class ProductType(DjangoObjectType):
     class Meta:
         model = Product
+
 
 class OrderType(DjangoObjectType):
     class Meta:
@@ -25,6 +28,7 @@ class OrderType(DjangoObjectType):
 # ---------------------------
 # Mutations
 # ---------------------------
+
 
 class CreateCustomer(graphene.Mutation):
     class Arguments:
@@ -40,11 +44,13 @@ class CreateCustomer(graphene.Mutation):
             raise Exception("Email already exists")
 
         if phone and not re.match(r'^(\+\d{10,15}|\d{3}-\d{3}-\d{4})$', phone):
-            raise Exception("Invalid phone format. Use +1234567890 or 123-456-7890")
+            raise Exception(
+                "Invalid phone format. Use +1234567890 or 123-456-7890")
 
         customer = Customer(name=name, email=email, phone=phone)
         customer.save()
         return CreateCustomer(customer=customer, message="Customer created successfully")
+
 
 class BulkCreateCustomers(graphene.Mutation):
     class Arguments:
@@ -81,6 +87,7 @@ class BulkCreateCustomers(graphene.Mutation):
 
         return BulkCreateCustomers(customers=valid_customers, errors=errors)
 
+
 class CreateProduct(graphene.Mutation):
     class Arguments:
         name = graphene.String(required=True)
@@ -98,6 +105,7 @@ class CreateProduct(graphene.Mutation):
         product = Product(name=name, price=Decimal(price), stock=stock)
         product.save()
         return CreateProduct(product=product)
+
 
 class CreateOrder(graphene.Mutation):
     class Arguments:
@@ -138,11 +146,13 @@ class CreateOrder(graphene.Mutation):
 # Mutation & Query Classes
 # ---------------------------
 
+
 class Mutation(graphene.ObjectType):
     create_customer = CreateCustomer.Field()
     bulk_create_customers = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
+
 
 class Query(graphene.ObjectType):
     customers = graphene.List(CustomerType)
@@ -157,3 +167,6 @@ class Query(graphene.ObjectType):
 
     def resolve_orders(self, info):
         return Order.objects.all()
+
+
+""" "all_customers =", "DjangoFilterConnectionField """
